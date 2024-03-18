@@ -26,17 +26,21 @@ class TTW implements Runnable {
     */
     @Override public void run() 
     { 
-        while (!(str = kb.readLine()).equals("exit")) {
         try {
-            dos.writeBytes(str + "\n");
-        } catch (Exception e) {
+                while (!(str = kb.readLine()).equals("exit")) {
+                try {
+                    dos.writeBytes(str + "\n");
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } 
+            }
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
+        }
     }
- }
 
 
             
-    }
 }
