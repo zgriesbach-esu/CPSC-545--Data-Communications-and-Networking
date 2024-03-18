@@ -3,14 +3,15 @@ import java.net.*;
 class TTW implements Runnable { 
     private Socket s;
     private DataOutputStream dos;
+    private BufferedReader br;
     private BufferedReader kb;
-    private String str;
+    private String str1;
 
-    public TTW(Socket sock, DataOutputStream dostream, BufferedReader keybrd)
+    public TTW(Socket sock, DataOutputStream dostream, BufferedReader buffr)
     {
         s = sock;
         dos = dostream;
-        kb = keybrd;
+        br = buffr;
 
     }
    /* public static void main(String args[]) 
@@ -26,22 +27,22 @@ class TTW implements Runnable {
     @Override public void run() 
     { 
 
-        try {
-            while (!(str = kb.readLine()).equals("exit")) 
-            { 
-  
-                // send to the server 
-                try {
-                    dos.writeBytes(str + "\n");
-                } catch (IOException e) {
+            try {
+                while (!(str1 = kb.readLine()).equals("exit")) 
+                { 
+                    // receive from the server 
+                 try {
+                    str1 = br.readLine();
+                } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 } 
-            System.out.println("Inside run method"); 
+  
+                System.out.println(str1); 
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
     }
 }
