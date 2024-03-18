@@ -12,7 +12,7 @@ class Client2 {
   
         // Create client socket 
         Socket s = new Socket("localhost", 888); 
-  
+
         // to send data to the server 
         DataOutputStream dos 
             = new DataOutputStream( 
@@ -29,6 +29,12 @@ class Client2 {
             = new BufferedReader( 
                 new InputStreamReader(System.in)); 
         String str, str1; 
+
+        TTW writer = new TTW(s, dos, kb);
+
+        Thread t1 = new Thread(writer);
+
+        t1.start();
   
         // repeat as long as exit 
         // is not typed at client 
