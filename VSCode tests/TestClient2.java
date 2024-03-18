@@ -33,23 +33,38 @@ class Client2 {
         TTW writer = new TTW(s, dos, kb);
 
         Thread t1 = new Thread(writer);
-
         t1.start();
-  
+
+        TTR reader = new TTR(s, dos, kb);
+
+        Thread t2 = new Thread(reader);
+        t2.start();
+
+       while (!(str = kb.readLine()).equals("exit")) 
+       {
+        // do nothing, allow the threads to run everything
+       }
+        
+       // for (int i = 0; i < 5; i++) {
         // repeat as long as exit 
         // is not typed at client 
-        while (!(str = kb.readLine()).equals("exit")) { 
+       /*  while (!(str = kb.readLine()).equals("exit")) { 
   
             // send to the server 
             dos.writeBytes(str + "\n"); 
-  
+        */
             // receive from the server 
-            str1 = br.readLine(); 
+            /* str1 = br.readLine(); 
   
             System.out.println(str1); 
-        } 
+        }  */
   
         // close connection. 
+
+        // join the write and read threads
+        t1.join();
+        t2.join();
+
         dos.close(); 
         br.close(); 
         kb.close(); 
