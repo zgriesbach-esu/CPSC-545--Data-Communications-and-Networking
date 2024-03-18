@@ -4,27 +4,31 @@ class TTR implements Runnable {
     private Socket s;
     private DataOutputStream dos;
     private BufferedReader kb;
-    private String str;
+    private BufferedReader br;
+    private String str1;
 
-    public TTR(Socket sock, DataOutputStream dostream, BufferedReader keybrd)
+    public TTR(Socket sock, DataOutputStream dostream, BufferedReader keybrd, BufferedReader buffr)
     {
         this.s = sock;
         this.dos = dostream;
         this.kb = keybrd;
+        this.br = buffr;
     }
 
     @Override public void run() 
     {
         try {
-            while (!(str = kb.readLine()).equals("exit")) { 
-  
-                // send to the server 
-                try {
-                    dos.writeBytes(str + "\n");
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } 
+            while (!(str1 = kb.readLine()).equals("exit")) 
+            { 
+                // receive from the server 
+             try {
+                str1 = br.readLine();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } 
+
+            System.out.println(str1); 
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block

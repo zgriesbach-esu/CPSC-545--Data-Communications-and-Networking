@@ -35,7 +35,7 @@ class Client2 {
         Thread t1 = new Thread(writer);
         t1.start();
 
-        TTR reader = new TTR(s, dos, kb);
+        TTR reader = new TTR(s, dos, kb, br);
 
         Thread t2 = new Thread(reader);
         t2.start();
