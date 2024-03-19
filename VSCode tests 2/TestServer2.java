@@ -31,6 +31,10 @@ class Server2 {
         BufferedReader kb 
             = new BufferedReader( 
                 new InputStreamReader(System.in)); 
+
+        DataOutputStream dos 
+            = new DataOutputStream( 
+                 s.getOutputStream()); 
   
         // server executes continuously 
         while (true) { 
@@ -46,7 +50,8 @@ class Server2 {
                 str1 = kb.readLine(); 
   
                 // send to client 
-                ps.println(str1); 
+                //ps.println(str1); 
+                dos.writeBytes(str1 + "\n");
             } 
   
             // close connection 
