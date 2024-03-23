@@ -11,14 +11,7 @@ class Client2 {
     { 
   
         // Create client socket 
-        Socket s = new Socket("localhost", 888);
-        
-        ServerConnector serverConn = new ServerConnector(s);
-
-        new Thread(serverConn).start();
-
-        // PrintStream out
-        //     = new PrintStream(s.getOutputStream());
+        Socket s = new Socket("localhost", 887); 
 
         // to send data to the server 
         DataOutputStream dos 
@@ -37,15 +30,15 @@ class Client2 {
                 new InputStreamReader(System.in)); 
         String str, str1; 
 
-        // TTW writer = new TTW(s, dos, kb);
+        TTW writer = new TTW(s, dos, kb);
 
-        // Thread t1 = new Thread(writer);
-        // t1.start();
+        Thread t1 = new Thread(writer);
+        t1.start();
 
-        // TTR reader = new TTR(s, dos, kb, br);
+        TTR reader = new TTR(s, dos, kb, br);
 
-        // Thread t2 = new Thread(reader);
-        // t2.start();
+        Thread t2 = new Thread(reader);
+        t2.start();
 
         
        while (!(str = kb.readLine()).equals("exit")) 
@@ -56,10 +49,10 @@ class Client2 {
       // for (int i = 0; i < 5; i++) {
         // repeat as long as exit 
         // is not typed at client 
-     while (!(str = kb.readLine()).equals("exit")) { 
+    //  while (!(str = kb.readLine()).equals("exit")) { 
   
-            // send to the server 
-            dos.writeBytes(str + "\n"); 
+    //         // send to the server 
+    //         dos.writeBytes(str + "\n"); 
             
 
     //         // receive from the server 
@@ -72,8 +65,8 @@ class Client2 {
         // close connection. 
 
         // join the write and read threads
-        // t1.join();
-        // t2.join();
+        t1.join();
+        t2.join();
 
         dos.close(); 
         br.close(); 
