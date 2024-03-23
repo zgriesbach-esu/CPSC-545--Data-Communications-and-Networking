@@ -2,6 +2,7 @@
 import java.io.*; 
 import java.net.*; 
 
+// Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
 public class ServerConnector implements Runnable{
     private Socket server;
     private BufferedReader in;

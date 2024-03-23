@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList; 
 
+// Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
 class ClientHandler implements Runnable{
     private Socket clientSock;
     private PrintStream out;
