@@ -29,7 +29,40 @@ class ClientHandler implements Runnable{
     @Override
     public void run() {
         
+        int attempts = 0;
+        String loginName = "";
+        String pWord = "";
+
+        while (attempts < 3) {
+
+            // // Prompt user for username and password
+            clients.get(clientNumber - 1).out.println("Please enter name ");
+            try {
+                loginName = in.readLine();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }    
+            clients.get(clientNumber - 1).out.println("Please enter password ");
+            try {
+                pWord = in.readLine();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            // If login info is valid, valid == 1, otherwise valid == 0
+            int valid = 1;
+            
+            valid = validate(loginName, pWord);
+            attempts++;
+            if (valid == 1) {
+
         try{
+               
+                
+
+                
                 while (true) {
                     // read in message from client
                     String msg = in.readLine();
@@ -41,7 +74,7 @@ class ClientHandler implements Runnable{
 
 
                 }
-            
+        
         } catch (IOException e) {
             System.err.println("IOException in client handler");
             e.printStackTrace();
@@ -52,6 +85,17 @@ class ClientHandler implements Runnable{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+        
+
+    }
+    clients.get(clientNumber - 1).out.println("Failed to log in");
+    // try {
+    //     clientSock.close();
+    // } catch (IOException e) {
+    //     // TODO Auto-generated catch block
+    //     e.printStackTrace();
+    // }
 
     }
     
@@ -59,7 +103,24 @@ class ClientHandler implements Runnable{
         for (ClientHandler aClient: clients )
         {
             // Send message to all with sender's number attached
-            aClient.out.println("client" + clientNumber + ": " + msg);
+            aClient.out.println("client " + clientNumber + ": " + msg);
         }
+
+        
+
     }
+        // Checks if provided username and password are a valid pair
+        int validate(String name, String pass) {
+
+            for (int i = 0; i < 2; i++)
+		{
+            
+			if ((name.equals(names[i])) && (pass.equals(passwords[i])))
+			{
+			return 1; // Name and password match
+			}
+		}
+            return 0;
+    }
+
 }

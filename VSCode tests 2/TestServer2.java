@@ -42,7 +42,7 @@ class Server2 {
         // Create server Socket 
         ServerSocket ss = new ServerSocket(888); 
         
-        int threadCount = 1;
+        int threadCount = 0;
         int clientNum = 1;
 
         while (threadCount < 4)

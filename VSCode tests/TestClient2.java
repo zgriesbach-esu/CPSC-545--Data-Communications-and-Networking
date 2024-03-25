@@ -57,6 +57,7 @@ class Client2 {
       // for (int i = 0; i < 5; i++) {
        // repeat as long as exit 
        // is not typed at client 
+  
      while (!(str = kb.readLine()).equals("exit")) { 
     
             // send to the server 
