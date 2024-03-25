@@ -3,30 +3,55 @@
   
 import java.io.*; 
 import java.net.*;
+import java.util.*; 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors; 
 
+
 // Core function: https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
 class Server2 { 
-  
+    
     public static void main(String args[]) 
         throws Exception 
     { 
         final ArrayList<ClientHandler> clientList = new ArrayList<ClientHandler>();
         final ExecutorService pool = Executors.newFixedThreadPool(4);
-  
+        
+        File file = new File("psswds.txt");
+        
+        // Create arrays for usernames and passwords
+        String[] names = new String[10];
+        String[] passwords = new String[10];
+        // String msgBuffer;
+        // int attempts = 0;
+        
+        // Read in usernames and passwords from psswds.txt
+        // Keep the entries paired with each other
+        Scanner scn = new Scanner(file);
+        int i =0;
+        while (scn.hasNext() != false)
+        {
+            names[i] = scn.next();
+            System.out.print(names[i] + " ");
+            passwords[i] = scn.next();
+            System.out.print(passwords[i] + "\n");
+            i++;
+        }
+
         // Create server Socket 
         ServerSocket ss = new ServerSocket(888); 
         
-        int threadCount = 0;
+        int threadCount = 1;
+        int clientNum = 1;
 
         while (threadCount < 4)
         {
             Socket s = ss.accept();
-            ClientHandler clientThread = new ClientHandler(s, clientList);
+            ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords, clientNum);
             clientList.add(clientThread);
             threadCount++;
+            clientNum++;
 
             pool.execute(clientThread);
         }

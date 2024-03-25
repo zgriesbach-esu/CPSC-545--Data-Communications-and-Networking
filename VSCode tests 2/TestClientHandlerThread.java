@@ -8,13 +8,21 @@ class ClientHandler implements Runnable{
     private PrintStream out;
     private BufferedReader in;
     private ArrayList<ClientHandler> clients;
+    private String[] names;
+    private String[] passwords;
+    private int clientNumber;
 
     // Constructor
-    public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli) throws IOException {
+    public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
+     String[] usernames, String[] pwords, int clientNum) throws IOException {
         this.clientSock = clientSocket;
         this.clients = cli;
+        this.names = usernames;
+        this.passwords = pwords;
+        this.clientNumber = clientNum;
         in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
         out = new PrintStream(clientSock.getOutputStream());
+        
     }
 
 
@@ -50,7 +58,8 @@ class ClientHandler implements Runnable{
         public void messageAll(String msg) {
         for (ClientHandler aClient: clients )
         {
-            aClient.out.println(msg);
+            // Send message to all with sender's number attached
+            aClient.out.println("client" + clientNumber + ": " + msg);
         }
     }
 }
