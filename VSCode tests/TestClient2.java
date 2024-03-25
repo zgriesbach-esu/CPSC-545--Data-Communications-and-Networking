@@ -3,7 +3,8 @@
   
 import java.io.*; 
 import java.net.*; 
-  
+
+// Core function: https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
 class Client2 { 
   
     public static void main(String args[]) 

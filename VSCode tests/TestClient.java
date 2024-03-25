@@ -1,7 +1,7 @@
 // A Java program for a Client
 import java.io.*;
 import java.net.*;
- 
+
 public class TestClient {
     // initialize socket and input output streams
     private Socket socket = null;
