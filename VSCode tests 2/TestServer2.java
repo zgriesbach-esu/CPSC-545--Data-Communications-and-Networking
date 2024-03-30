@@ -14,7 +14,9 @@ class Server2 {
     
     public static void main(String args[]) 
         throws Exception 
+
     { 
+        Queue<String> msgQueue = new PriorityQueue<String>();
         final ArrayList<ClientHandler> clientList = new ArrayList<ClientHandler>();
         final ExecutorService pool = Executors.newFixedThreadPool(4);
         
@@ -48,7 +50,7 @@ class Server2 {
         while (threadCount < 4)
         {
             Socket s = ss.accept();
-            ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords, clientNum);
+            ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords, clientNum, msgQueue);
             clientList.add(clientThread);
             threadCount++;
             clientNum++;

@@ -1,6 +1,7 @@
 import java.io.*; 
 import java.net.*;
-import java.util.ArrayList; 
+import java.util.ArrayList;
+import java.util.*; 
 
 // Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
 class ClientHandler implements Runnable{
@@ -11,15 +12,16 @@ class ClientHandler implements Runnable{
     private String[] names;
     private String[] passwords;
     private int clientNumber;
-
+    private Queue<String> messages;
     // Constructor
     public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
-     String[] usernames, String[] pwords, int clientNum) throws IOException {
+     String[] usernames, String[] pwords, int clientNum, Queue<String> msgs) throws IOException {
         this.clientSock = clientSocket;
         this.clients = cli;
         this.names = usernames;
         this.passwords = pwords;
         this.clientNumber = clientNum;
+        this.messages = msgs;
         in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
         out = new PrintStream(clientSock.getOutputStream());
         
@@ -28,10 +30,10 @@ class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        
         int attempts = 0;
         String loginName = "";
-        String pWord = "";
+        String pWord = ""; 
+        
 
         while (attempts < 3) {
 
@@ -65,11 +67,21 @@ class ClientHandler implements Runnable{
                 
                 while (true) {
                     // read in message from client
-                    String msg = in.readLine();
+
+                    // send all messages available
+                    while (messages.peek() != null)
+                    {
+                        messageAll();
+                    }
+
+
+                    String msg = "client " + clientNumber + ":" + in.readLine();
+
+                    messages.add(msg);
                     
                     if (msg.equals("quit")) break;
                     //broadcast message to all other clients
-                    messageAll(msg);
+                    // messageAll();
 
 
 
@@ -98,12 +110,14 @@ class ClientHandler implements Runnable{
     // }
 
     }
-    
-        public void messageAll(String msg) {
+        // Trying removing direct access to msg in favor of remove()
+        public void messageAll() {
         for (ClientHandler aClient: clients )
         {
+            String msg = messages.remove();
             // Send message to all with sender's number attached
-            aClient.out.println("client " + clientNumber + ": " + msg);
+            aClient.out.println(msg);
+          
         }
 
         
