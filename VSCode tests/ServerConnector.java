@@ -24,13 +24,23 @@ public class ServerConnector implements Runnable{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
+            // Attempting to exit gracefully
+            if (msg.equals("quit"))
+            {
+                break;
+            }
             System.out.println(msg);
 
         }
+        // Close socket
+        try {
+            server.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'run'");
+        
     }
 
 

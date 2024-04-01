@@ -19,7 +19,7 @@ class Server2 {
         Queue<String> msgQueue = new PriorityQueue<String>();
         final ArrayList<ClientHandler> clientList = new ArrayList<ClientHandler>();
         final ExecutorService pool = Executors.newFixedThreadPool(4);
-        
+
         File file = new File("psswds.txt");
         
         // Create arrays for usernames and passwords
@@ -50,7 +50,8 @@ class Server2 {
         while (threadCount < 4)
         {
             Socket s = ss.accept();
-            ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords, clientNum, msgQueue);
+            ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords,
+             clientNum, msgQueue);
             clientList.add(clientThread);
             threadCount++;
             clientNum++;
@@ -106,7 +107,8 @@ class Server2 {
         //     ps.close(); 
         //     br.close(); 
         //     kb.close(); 
-        //     ss.close(); 
+               ss.close(); 
+               scn.close();
         //     s.close(); 
   
             // terminate application 

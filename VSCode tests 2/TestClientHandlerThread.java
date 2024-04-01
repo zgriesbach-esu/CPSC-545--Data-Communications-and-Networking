@@ -67,27 +67,32 @@ class ClientHandler implements Runnable{
                 
                 while (true) {
                     // read in message from client
-
-                    // send all messages available
-                    while (messages.peek() != null)
-                    {
-                        messageAll();
-                    }
-
-
-                    String msg = "client " + clientNumber + ":" + in.readLine();
-
-                    messages.add(msg);
                     
-                    if (msg.equals("quit")) break;
-                    //broadcast message to all other clients
-                    // messageAll();
+                   
+                    String msg = "client " + clientNumber + ": " + in.readLine();
+                
+                        synchronized(messages) {
+                            messages.add(msg);
 
-
+                            // debugging code
+                            System.out.println("Writing " + clientNumber +
+                            "'s message: " + msg);
+                        }
+                        if (msg.equals("quit")) break;
+                        //broadcast message to all other clients
+                        messageAll(msg);
+                        
+                         // send all messages available
+                   /*  synchronized (messages) {
+                        while(messages.size() != 0)
+                        {
+                            messageAll();
+                        }
+                }*/
 
                 }
-        
-        } catch (IOException e) {
+
+                } catch (IOException e) {
             System.err.println("IOException in client handler");
             e.printStackTrace();
         }
@@ -97,6 +102,7 @@ class ClientHandler implements Runnable{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            
         }
         
 
@@ -111,10 +117,10 @@ class ClientHandler implements Runnable{
 
     }
         // Trying removing direct access to msg in favor of remove()
-        public void messageAll() {
+        public void messageAll(String msg) {
         for (ClientHandler aClient: clients )
         {
-            String msg = messages.remove();
+            // String qMsg = messages.remove();
             // Send message to all with sender's number attached
             aClient.out.println(msg);
           

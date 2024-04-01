@@ -58,7 +58,7 @@ class Client2 {
        // repeat as long as exit 
        // is not typed at client 
   
-     while (!(str = kb.readLine()).equals("exit")) { 
+     while (!(str = kb.readLine()).equals("quit")) { 
     
             // send to the server 
             dos.writeBytes(str + "\n"); 
@@ -74,10 +74,6 @@ class Client2 {
     } 
     
         // close connection. 
-
-        // join the write and read threads
-        // t1.join();
-        // t2.join();
 
         dos.close(); 
         br.close(); 
