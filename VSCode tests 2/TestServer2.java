@@ -9,7 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors; 
 
 
-// Core function: https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
+// Core function modified from https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
+// Removed i/o from server and moved it to ClientHandler threads created instead
+// Thread creation modified from https://www.youtube.com/watch?v=ZIzoesrHHQo
 class Server2 { 
     
     public static void main(String args[]) 
