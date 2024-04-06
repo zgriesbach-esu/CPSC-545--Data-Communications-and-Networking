@@ -3,14 +3,13 @@ import java.util.zip.CRC32;
 import java.util.*;
 
 class CRCPRog {
-private static int t;
 public static void main(String args[]) throws FileNotFoundException {
 
     String test = "Hello Dave";
 
     File file = new File("src\\CRCtext.txt");
         
-        
+        // Create an array for all the lines of text
         String[] textStrings = new String[10];
         
         // Read in all text strings from CRCtext.txt
@@ -18,26 +17,27 @@ public static void main(String args[]) throws FileNotFoundException {
         int i =0;
         for (i = 0; i < 10; i++)
         {
+            // Save the text string to the array and the temp variable, msg
             String msg = textStrings[i] = scn.nextLine();
             //String msg = textStrings[i];
 
-            // Create checksums and convert to hex
+            // Create checksums and convert to hexadecimal
             long code = generateCRC(textStrings[i]);
             String hex = String.format("%4X", code);
 
             // Concatenate line with checksum on the end
             textStrings[i] = msg + hex;
             System.out.print(textStrings[i] + "\n");
-        }
 
-    long genCRC = generateCRC(test);
+            //long deCode = code%0x04C11DB7;
+
+            //System.out.println("decoded: " + deCode);
+        }
+        scn.close();
 
     // OLD test code
-    // Format the checksum to be in hexadecimal form
-    String formatted = String.format("%4X", genCRC);
-
-    System.out.println(test + " " + formatted);
-
+    
+    
 }
 
 public static long generateCRC(String input) {
