@@ -1,8 +1,11 @@
 import java.io.*; 
-import java.net.*; 
+import java.net.*;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 // Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
-public class ServerConnector implements Runnable{
+public class ServerConnector implements Runnable {
     private Socket server;
     private BufferedReader in;
    // private PrintStream out;
@@ -15,6 +18,13 @@ public class ServerConnector implements Runnable{
     
     @Override
     public void run() {
+
+        JFrame tester = new JFrame();
+        tester.setSize(300,200);
+        JPanel tPanel = new JPanel();
+        tester.add(tPanel);
+        tester.setVisible(true);
+     
         while (true) {
             String msg = null;
             try {
@@ -41,6 +51,6 @@ public class ServerConnector implements Runnable{
 
         
     }
-
-
 }
+
+

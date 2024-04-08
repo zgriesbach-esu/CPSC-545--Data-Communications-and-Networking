@@ -2,7 +2,7 @@
 // sends data and receives also 
   
 import java.io.*; 
-import java.net.*; 
+import java.net.*;
 
 // Core function: https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
 class Client2 { 
@@ -10,12 +10,12 @@ class Client2 {
     public static void main(String args[]) 
         throws Exception 
     { 
-  
+        
         // Create client socket 
         Socket s = new Socket("localhost", 888);
         
         ServerConnector serverConn = new ServerConnector(s);
-
+        
         new Thread(serverConn).start();
 
         // PrintStream out
@@ -65,9 +65,9 @@ class Client2 {
             
 
             // receive from the server 
-        //     str1 = br.readLine(); 
+            //str1 = br.readLine(); 
   
-          //  System.out.println(str1); 
+            //System.out.println(str1); 
 
             
             
