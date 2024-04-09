@@ -5,8 +5,7 @@ import java.util.*;
 class CRCPRog {
 public static void main(String args[]) throws FileNotFoundException {
 
-    String test = "Hello Dave";
-
+    // Target the CRCtext file for scanner object
     File file = new File("src\\CRCtext.txt");
         
         // Create an array for all the lines of text
@@ -21,34 +20,27 @@ public static void main(String args[]) throws FileNotFoundException {
             String msg = textStrings[i] = scn.nextLine();
             //String msg = textStrings[i];
 
-            // Create checksums and convert to hexadecimal
+            // Create checksum and convert to hexadecimal
             long code = generateCRC(textStrings[i]);
             String hex = String.format("%4X", code);
 
             // Concatenate line with checksum on the end
             textStrings[i] = msg + hex;
             System.out.print(textStrings[i] + "\n");
-
-            //long deCode = code%0x04C11DB7;
-
-            //System.out.println("decoded: " + deCode);
         }
         scn.close();
 
-    // OLD test code
-    
-    
 }
+    // Generate checksum based on string passed by parameter
+    public static long generateCRC(String input) {
+        
+        byte[] bytes = input.getBytes(); // Put input string into byte array
+        CRC32 myCRC = new CRC32();
 
-public static long generateCRC(String input) {
-    
-    byte[] bytes = input.getBytes(); // Put input string into byte array
-    CRC32 myCRC = new CRC32();
+        // generate the checksum of the input
+        myCRC.update(bytes, 0, bytes.length); 
 
-    // generate the checksum of the input
-    myCRC.update(bytes, 0, bytes.length); 
-
-    return myCRC.getValue();
-}
+        return myCRC.getValue();
+    }
 
 }
