@@ -7,6 +7,7 @@ import java.util.*;
 class ClientHandler implements Runnable{
     private Socket clientSock;
     private PrintStream out;
+    private DataOutputStream validOut;
     private BufferedReader in;
     private ArrayList<ClientHandler> clients;
     private String[] names;
@@ -24,7 +25,7 @@ class ClientHandler implements Runnable{
         this.messages = msgs;
         in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
         out = new PrintStream(clientSock.getOutputStream());
-        
+        validOut = new DataOutputStream(clientSock.getOutputStream()); 
     }
 
 
@@ -37,15 +38,16 @@ class ClientHandler implements Runnable{
 
         while (attempts < 3) {
 
-            // // Prompt user for username and password
-            clients.get(clientNumber - 1).out.println("Please enter name ");
+
+            // // // Prompt user for username and password
+            // clients.get(clientNumber - 1).out.println("Please enter name ");
             try {
                 loginName = in.readLine();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }    
-            clients.get(clientNumber - 1).out.println("Please enter password ");
+            // clients.get(clientNumber - 1).out.println("Please enter password ");
             try {
                 pWord = in.readLine();
             } catch (IOException e) {
@@ -59,7 +61,12 @@ class ClientHandler implements Runnable{
             valid = validate(loginName, pWord);
             attempts++;
             if (valid == 1) {
-
+                // try {
+                //     validOut.writeBytes("Accepted");
+                // } catch (IOException e) {
+                //     // TODO Auto-generated catch block
+                //     e.printStackTrace();
+                // }
         try{
                
                 
@@ -137,6 +144,12 @@ class ClientHandler implements Runnable{
             
 			if ((name.equals(names[i])) && (pass.equals(passwords[i])))
 			{
+                try {
+                    validOut.writeBytes("Accepted");
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 			return 1; // Name and password match
 			}
 		}

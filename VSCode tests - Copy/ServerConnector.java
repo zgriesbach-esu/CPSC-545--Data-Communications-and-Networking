@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -16,8 +17,12 @@ public class ServerConnector implements Runnable, ActionListener {
     private BufferedReader in;
     private DataOutputStream out;
     private String msg = null;
+    private JTextField loginText;
+    private JPasswordField passText;
+    private JButton loginButton;
     private JButton sendButton;
     private JTextField messageText;
+    
    // private PrintStream out;
 
   
@@ -34,6 +39,8 @@ public class ServerConnector implements Runnable, ActionListener {
     
     @Override
     public void run() {
+
+        
 
         JFrame frame = new JFrame();
     
