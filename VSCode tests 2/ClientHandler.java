@@ -40,14 +40,14 @@ class ClientHandler implements Runnable{
 
 
             // // // Prompt user for username and password
-            // clients.get(clientNumber - 1).out.println("Please enter name ");
+            clients.get(clientNumber - 1).out.println("Please enter name ");
             try {
                 loginName = in.readLine();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }    
-            // clients.get(clientNumber - 1).out.println("Please enter password ");
+            clients.get(clientNumber - 1).out.println("Please enter password ");
             try {
                 pWord = in.readLine();
             } catch (IOException e) {
@@ -114,7 +114,7 @@ class ClientHandler implements Runnable{
         
 
     }
-    clients.get(clientNumber - 1).out.println("Failed to log in");
+    clients.get(clientNumber - 1).out.println("Too many attempts.");
     // try {
     //     clientSock.close();
     // } catch (IOException e) {
@@ -144,15 +144,12 @@ class ClientHandler implements Runnable{
             
 			if ((name.equals(names[i])) && (pass.equals(passwords[i])))
 			{
-                try {
-                    validOut.writeBytes("Accepted");
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                out.println("Login accepted.\nChat begins");
+                
 			return 1; // Name and password match
 			}
 		}
+            out.println("Failed to login.");
             return 0;
     }
 
