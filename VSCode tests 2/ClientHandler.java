@@ -7,13 +7,13 @@ import java.util.*;
 class ClientHandler implements Runnable{
     private Socket clientSock;
     private PrintStream out;
-    private DataOutputStream validOut;
     private BufferedReader in;
     private ArrayList<ClientHandler> clients;
     private String[] names;
     private String[] passwords;
     private int clientNumber;
     private Queue<String> messages;
+
     // Constructor
     public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
      String[] usernames, String[] pwords, int clientNum, Queue<String> msgs) throws IOException {
@@ -25,7 +25,6 @@ class ClientHandler implements Runnable{
         this.messages = msgs;
         in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
         out = new PrintStream(clientSock.getOutputStream());
-        validOut = new DataOutputStream(clientSock.getOutputStream()); 
     }
 
 
@@ -71,11 +70,11 @@ class ClientHandler implements Runnable{
                
                 
 
-                
+                // loop until client quits
                 while (true) {
-                    // read in message from client
-                    
                    
+                    
+                    // read in message from client
                     String msg = "client " + clientNumber + ": " + in.readLine();
                 
                         synchronized(messages) {

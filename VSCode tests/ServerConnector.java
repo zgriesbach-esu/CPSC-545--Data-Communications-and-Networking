@@ -3,8 +3,11 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+//import java.awt.BorderLayout;
 
 // Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
 // Button implementation from https://www.youtube.com/watch?v=-IMys4PCkIA
@@ -13,13 +16,9 @@ public class ServerConnector implements Runnable, ActionListener {
     private BufferedReader in;
     private DataOutputStream out;
     private String msg = null;
-    private JTextField loginText;
-    private JPasswordField passText;
-    private JButton loginButton;
     private JButton sendButton;
     private JTextField messageText;
-    private String validationStatus;
-    private boolean loginPressed = false;
+    private JScrollPane scroll;
    // private PrintStream out;
 
   
@@ -37,75 +36,44 @@ public class ServerConnector implements Runnable, ActionListener {
     @Override
     public void run() {
 
-
-        // LOGIN FRAME
-        JFrame frame2 = new JFrame("GroupChat Login");
-        frame2.setSize(300,300);
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel panel2 = new JPanel();
-        panel2.setSize(300,300);
-        panel2.setLayout(null);
-
-        loginText = new JTextField();
-
-        passText = new JPasswordField();
-
-        loginButton = new JButton("Log in");
-        loginButton.setBounds(10, 200 ,80,25);
-        loginButton.addActionListener(this);
-
-        loginText.setBounds(100, 100, 165, 25);
-        passText.setBounds(100, 150, 165, 25);
-
-        panel2.add(loginText);
-        panel2.add(passText);
-        panel2.add(loginButton);
-
-        frame2.add(panel2);
-        frame2.setVisible(true);
-
-        int attempts = 0;
-
-        while (attempts < 3)
-        {
-
-        
-            if (loginPressed == true && validationStatus.equals("Accepted")) {
-                    
-            
-
-            // LOGIN FRAME END
-
+            // Chat window creation
             JFrame frame = new JFrame();
         
             JPanel panel = new JPanel();
 
             JTextArea chatBox = new JTextArea();
-            chatBox.setBounds(100, 100, 200, 200);
-            panel.add(chatBox);
-            
+            chatBox.setBounds(100, 100, 10, 200);
+            chatBox.setLineWrap(true);
+            panel.add(chatBox); // attach chatBox to panel
+
+            scroll = new JScrollPane(chatBox);
+
+            //frame.getContentPane().add(scroll);
+
+            panel.add(scroll);
+
             messageText = new JTextField();
             sendButton = new JButton();
+
+            
         
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            panel.setLayout(null);
+            panel.setLayout(null); // use default layout for panel
 
             messageText.setBounds(100, 350, 165, 25);
-            panel.add(messageText);
+            panel.add(messageText); // attach messageText to panel
 
             sendButton.setBounds(10, 350 ,80,25);
             sendButton.setText("Send");
             sendButton.addActionListener(this);
-            panel.add(sendButton);
+            panel.add(sendButton); // attach sendButton to panel
 
 
             frame.setSize(350, 450);
             panel.setSize(350, 400);
 
-            frame.add(panel);
-            //frame.add(messageText);
-            //frame.add(sendButton);
+            frame.add(panel); // attach panel to frame
+            
             frame.setTitle("GroupChat");
             frame.setVisible(true);
             String chat = null;
@@ -129,23 +97,17 @@ public class ServerConnector implements Runnable, ActionListener {
                 System.out.println(msg);
 
             }
-                }
-                else {
-                attempts++;    
-                }
             
+                // Close socket
+                try {
+                    server.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
         
 }
-        // Close socket
-        try {
-            server.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        
-    }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -164,30 +126,9 @@ public class ServerConnector implements Runnable, ActionListener {
                 e1.printStackTrace();
             }
         }
-        else if (e.getSource() == loginButton)
-        {
-            
-            String login;
-            String pass;
-            login = loginText.getText();
-            pass = passText.getText();
-
-            try {
-                // send login name
-                out.writeBytes(login + "\n");
-                // send password
-                out.writeBytes(pass + "\n");
-
-                // set validation based on response
-                validationStatus = in.readLine();
-                loginPressed = true;
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
+        
         }
         //throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
 
-}
+
