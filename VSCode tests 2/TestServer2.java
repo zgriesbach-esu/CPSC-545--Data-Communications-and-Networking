@@ -25,10 +25,17 @@ class Server2 {
         File file = new File("psswds.txt");
         
         // Create arrays for usernames and passwords
+        // and shared array for logged in users
         String[] names = new String[10];
         String[] passwords = new String[10];
+        String[] loggedIn = new String[10];
         // String msgBuffer;
         // int attempts = 0;
+
+        for (int i = 0; i < 10; i++)
+        {
+            loggedIn[i] = "filler";
+        }
         
         // Read in usernames and passwords from psswds.txt
         // Keep the entries paired with each other
@@ -53,7 +60,7 @@ class Server2 {
         {
             Socket s = ss.accept();
             ClientHandler clientThread = new ClientHandler(s, clientList, names, passwords,
-             clientNum, msgQueue);
+             clientNum, msgQueue, loggedIn);
             clientList.add(clientThread);
             threadCount++;
             clientNum++;

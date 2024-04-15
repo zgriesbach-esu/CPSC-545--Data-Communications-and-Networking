@@ -11,18 +11,20 @@ class ClientHandler implements Runnable{
     private ArrayList<ClientHandler> clients;
     private String[] names;
     private String[] passwords;
+    private String[] loggedIn;
     private int clientNumber;
     private Queue<String> messages;
 
     // Constructor
     public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
-     String[] usernames, String[] pwords, int clientNum, Queue<String> msgs) throws IOException {
+     String[] usernames, String[] pwords, int clientNum, Queue<String> msgs, String[] lIn) throws IOException {
         this.clientSock = clientSocket;
         this.clients = cli;
         this.names = usernames;
         this.passwords = pwords;
         this.clientNumber = clientNum;
         this.messages = msgs;
+        this.loggedIn = lIn;
         in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
         out = new PrintStream(clientSock.getOutputStream());
     }
@@ -38,50 +40,46 @@ class ClientHandler implements Runnable{
         while (attempts < 3) {
 
 
-            // // // Prompt user for username and password
-            clients.get(clientNumber - 1).out.println("Please enter name ");
+            // prompt user for username and password
+            clients.get(clientNumber - 1).out.println("Please enter name.");
             try {
                 loginName = in.readLine();
+                out.println(loginName);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }    
-            clients.get(clientNumber - 1).out.println("Please enter password ");
+            clients.get(clientNumber - 1).out.println("Please enter password.");
             try {
                 pWord = in.readLine();
+                out.println(pWord);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
-            // If login info is valid, valid == 1, otherwise valid == 0
+            // if login info is valid, valid == 1, otherwise valid == 0
             int valid = 1;
             
             valid = validate(loginName, pWord);
             attempts++;
             if (valid == 1) {
-                // try {
-                //     validOut.writeBytes("Accepted");
-                // } catch (IOException e) {
-                //     // TODO Auto-generated catch block
-                //     e.printStackTrace();
-                // }
-        try{
-               
-                
 
+        try{
                 // loop until client quits
                 while (true) {
                    
                     
                     // read in message from client
-                    String msg = "client " + clientNumber + ": " + in.readLine();
+                    // label message with username
+                    
+                    String msg = loginName + ": " + in.readLine();
                 
                         synchronized(messages) {
                             messages.add(msg);
 
                             // debugging code
-                            System.out.println("Writing " + clientNumber +
+                            System.out.println("Writing " + loginName +
                             "'s message: " + msg);
                         }
                         if (msg.equals("quit")) break;
@@ -137,13 +135,23 @@ class ClientHandler implements Runnable{
     }
         // Checks if provided username and password are a valid pair
         int validate(String name, String pass) {
-
-            for (int i = 0; i < 2; i++)
+        int loginCount = 0;
+            for (int i = 0; i < 5; i++)
 		{
             
 			if ((name.equals(names[i])) && (pass.equals(passwords[i])))
 			{
+                for (int j = 0; j < 5; j++) // check that user login has not already been used
+                {
+                    if(name.equals(loggedIn[j]))
+                    {
+                        out.println("User is already logged in.");
+                        return 0;
+                    } 
+                }
                 out.println("Login accepted.\nChat begins");
+                loggedIn[loginCount] = name; // track users logged in
+                loginCount++;
                 
 			return 1; // Name and password match
 			}
