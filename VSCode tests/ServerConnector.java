@@ -82,7 +82,6 @@ public class ServerConnector implements Runnable, ActionListener {
 
             
             frame.setVisible(true);
-            String chat = "Welcome to GroupChat, Please sign in.";
             while (true) {
                 
                 
@@ -94,12 +93,9 @@ public class ServerConnector implements Runnable, ActionListener {
                     e.printStackTrace();
                 }
                 // Attempting to exit gracefully
-                if (msg.equals("quit"))
-                {
-                    break;
-                }
-                    chat = chat + "\n" + msg;
-                    chatBox.setText(chat);
+                if (msg.equals("quit")) break;
+                    
+                    chatBox.append(msg + "\n");
                     System.out.println(msg);
             }
             
@@ -112,33 +108,30 @@ public class ServerConnector implements Runnable, ActionListener {
                 }
         
 }
-    
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            if (e.getSource() == sendButton)
-            {
+@Override
+public void actionPerformed(ActionEvent e) {
+    // TODO Auto-generated method stub
+    if (e.getSource() == sendButton)
+    {
 
-                String msg = null;
-                msg = messageText.getText();
-                messageText.setText("");
+        String msg = null;
+        msg = messageText.getText();
+        messageText.setText("");
 
 
-                // don't send blank messages or whitespace
-                if (!msg.matches("[ ]*"))
-                {
-                    try {
-                        out.writeBytes(msg + "\n");
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                }
+        // don't send blank messages or whitespace
+        if (!msg.matches("[ ]*"))
+        {
+            try {
+                out.writeBytes(msg + "\n");
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
             }
         }
-        
-        //throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
+}
 
-
+//throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+}

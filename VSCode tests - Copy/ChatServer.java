@@ -1,8 +1,6 @@
 import java.util.*;
 import java.io.*;
 
-import javax.swing.*;
-
 public class ChatServer{
 
     public static void main(String args[]) throws FileNotFoundException{

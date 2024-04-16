@@ -62,7 +62,6 @@ public class ServerConnector implements Runnable, ActionListener {
     panel.add(messageText); // attach messageText to panel
 
     sendButton.setBounds(10, 350 ,80,25);
-    //sendButton.setText("Send");
     sendButton.addActionListener(this);
     panel.add(sendButton); // attach sendButton to panel
 
@@ -82,7 +81,6 @@ public class ServerConnector implements Runnable, ActionListener {
 
             
             frame.setVisible(true);
-            String chat = "Welcome to GroupChat, Please sign in.";
             while (true) {
                 
                 
@@ -94,12 +92,9 @@ public class ServerConnector implements Runnable, ActionListener {
                     e.printStackTrace();
                 }
                 // Attempting to exit gracefully
-                if (msg.equals("quit"))
-                {
-                    break;
-                }
-                    chat = chat + "\n" + msg;
-                    chatBox.setText(chat);
+                if (msg.equals("quit")) break;
+                    
+                    chatBox.append(msg + "\n");
                     System.out.println(msg);
             }
             

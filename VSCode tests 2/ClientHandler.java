@@ -9,6 +9,7 @@ class ClientHandler implements Runnable{
     private PrintStream out;
     private BufferedReader in;
     private ArrayList<ClientHandler> clients;
+    private String lastMsg = "FILLER_TEXT";
     private String[] names;
     private String[] passwords;
     private String[] loggedIn;
@@ -67,32 +68,21 @@ class ClientHandler implements Runnable{
 
         try{
                 // loop until client quits
-                while (true) {
+                while (!clientSock.isClosed()) {
                    
                     
                     // read in message from client
                     // label message with username
-                    
                     String msg = loginName + ": " + in.readLine();
-                
                         synchronized(messages) {
                             messages.add(msg);
 
                             // debugging code
-                            System.out.println("Writing " + loginName +
-                            "'s message: " + msg);
+                            System.out.println("Writing " + msg);
                         }
                         if (msg.equals("quit")) break;
                         //broadcast message to all other clients
                         messageAll(msg);
-                        
-                         // send all messages available
-                   /*  synchronized (messages) {
-                        while(messages.size() != 0)
-                        {
-                            messageAll();
-                        }
-                }*/
 
                 }
 

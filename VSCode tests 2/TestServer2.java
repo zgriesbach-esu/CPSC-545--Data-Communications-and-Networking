@@ -121,7 +121,8 @@ class Server2 {
         //     s.close(); 
   
             // terminate application 
-            System.exit(0); 
+            pool.close();
+            //System.exit(0); 
   
         } // end of while 
     } 
