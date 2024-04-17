@@ -1,10 +1,19 @@
 
+//*******************************//
+// ClientHandler Class           //
+// Author: Zachary Griesbach     //
+//                               //
+// Threads which perform user    //
+// validation and then process   //
+// message i/o requests          //
+//*******************************//
+
 import java.io.*; 
 import java.net.*;
 import java.util.ArrayList;
 import java.util.*; 
 
-// Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
+// Core function from https: //www.youtube.com/watch?v=ZIzoesrHHQo
 class ClientHandler implements Runnable{
     private Socket clientSock;
     private PrintStream out;
@@ -18,7 +27,8 @@ class ClientHandler implements Runnable{
 
     // Constructor
     public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
-     String[] usernames, String[] pwords, int clientNum, Queue<String> msgs, String[] lIn) throws IOException {
+     String[] usernames, String[] pwords, int clientNum, 
+     Queue<String> msgs, String[] lIn) throws IOException {
         this.clientSock = clientSocket;
         this.clients = cli;
         this.names = usernames;
@@ -26,8 +36,8 @@ class ClientHandler implements Runnable{
         this.clientNumber = clientNum;
         this.messages = msgs;
         this.loggedIn = lIn;
-        in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
-        out = new PrintStream(clientSock.getOutputStream());
+        in = new BufferedReader(new InputStreamReader(clientSock.getInputStream())); // reads in from the socket
+        out = new PrintStream(clientSock.getOutputStream()); // writes out to the socket
     }
 
 
@@ -81,7 +91,7 @@ class ClientHandler implements Runnable{
                             // debugging code
                             System.out.println("Writing " + msg);
                         }
-                        if (msg.equals("quit")) break;
+                        if (clientSock.isClosed()) break;
                         //broadcast message to all other clients
                         messageAll(msg);
 
@@ -102,6 +112,7 @@ class ClientHandler implements Runnable{
         
 
     }
+    // Three login attempts fail, limit exceeded
     clients.get(clientNumber - 1).out.println("Too many attempts.");
 
     }
@@ -116,25 +127,25 @@ class ClientHandler implements Runnable{
         
 
     }
-        // Checks if provided username and password are a valid pair
+        // Checks if provided username (name) and password (pass) are a valid pair
         int validate(String name, String pass) {
-        int loginCount = 0;
             for (int i = 0; i < 5; i++)
 		{
-            
+            int loginCount = -1;
 			if ((name.equals(names[i])) && (pass.equals(passwords[i])))
 			{
                 for (int j = 0; j < 5; j++) // check that user login has not already been used
                 {
-                    if(name.equals(loggedIn[j]))
+                    if(name.equals(loggedIn[j])) // login matches an existing client
                     {
                         out.println("User is already logged in.");
                         return 0;
                     } 
                 }
-                out.println("Login accepted.\nChat begins");
-                loggedIn[loginCount] = name; // track users logged in
-                loginCount++;
+                out.println("Login accepted.\nChat begins.");
+                loginCount += clientNumber; // select the appropriate index for this client
+                loggedIn[loginCount] = name; // place current client's login name into the array
+                
                 
 			return 1; // Name and password match
 			}
