@@ -1,3 +1,4 @@
+
 //*******************************//
 // Server Class                  //
 // Author: Zachary Griesbach     //
@@ -15,16 +16,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors; 
 
 
-// Core function modified from https: //www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
-// Removed i/o from server and moved it to ClientHandler threads created instead
-// Thread creation modified from https: //www.youtube.com/watch?v=ZIzoesrHHQo
+// core function modified from https: //www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
+// removed i/o from server and moved it to ClientHandler threads created instead
+// thread creation modified from https: //www.youtube.com/watch?v=ZIzoesrHHQo
 class Server { 
     
-    public static void main(String args[]) 
-        throws Exception 
+    public static void main(String args[]) throws Exception { 
 
-    { 
-        // This queue temporarily stores the sent messages
+        // this queue temporarily stores the sent messages
         Queue<String> msgQueue = new PriorityQueue<String>(); 
 
         // this arraylist is used to refer to the ClientHandler instances
@@ -36,7 +35,7 @@ class Server {
         // location of the password file
         File file = new File("src/psswds.txt"); 
         
-        // Create arrays for usernames and passwords
+        // create arrays for usernames and passwords
         // and shared array for logged in users
         String[] names = new String[10];
         String[] passwords = new String[10];
@@ -48,8 +47,8 @@ class Server {
             loggedIn[i] = "filler";
         }
         
-        // Read in usernames and passwords from psswds.txt
-        // Keep the entries paired with each other
+        // read in usernames and passwords from psswds.txt
+        // keep the entries paired with each other
         Scanner scn = new Scanner(file);
         int i =0;
         while (scn.hasNext() != false)
@@ -61,7 +60,7 @@ class Server {
             i++;
         }
 
-        // Create server Socket 
+        // create server Socket 
         ServerSocket ss = new ServerSocket(888); 
         
         int threadCount = 0;
@@ -79,12 +78,11 @@ class Server {
             pool.execute(clientThread);
         }
                ss.close(); 
-               scn.close();
-        //     s.close(); 
+               scn.close(); 
   
             // terminate application 
             pool.close();
             System.exit(0); 
   
-        } // end of while 
+        } 
     } 

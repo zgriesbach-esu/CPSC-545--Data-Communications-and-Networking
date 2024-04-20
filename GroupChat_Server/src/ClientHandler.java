@@ -13,7 +13,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.*; 
 
-// Core function from https: //www.youtube.com/watch?v=ZIzoesrHHQo
+// core function modified from https: //www.youtube.com/watch?v=ZIzoesrHHQo
 class ClientHandler implements Runnable{
     private Socket clientSock;
     private PrintStream out;
@@ -25,7 +25,7 @@ class ClientHandler implements Runnable{
     private int clientNumber;
     private Queue<String> messages;
 
-    // Constructor
+    // constructor
     public ClientHandler(Socket clientSocket, ArrayList<ClientHandler> cli,
      String[] usernames, String[] pwords, int clientNum, 
      Queue<String> msgs, String[] lIn) throws IOException {
@@ -40,7 +40,7 @@ class ClientHandler implements Runnable{
         out = new PrintStream(clientSock.getOutputStream()); // writes out to the socket
     }
 
-
+    // thread behavior
     @Override
     public void run() {
         int attempts = 0;
@@ -79,7 +79,7 @@ class ClientHandler implements Runnable{
 
         try{
                 // loop until client quits
-                while (!clientSock.isClosed()) {
+                while (true) {
                    
                     
                     // read in message from client
@@ -92,6 +92,7 @@ class ClientHandler implements Runnable{
                             System.out.println("Writing " + msg);
                         }
                         if (clientSock.isClosed()) break;
+
                         //broadcast message to all other clients
                         messageAll(msg);
 
@@ -101,23 +102,23 @@ class ClientHandler implements Runnable{
             System.err.println("IOException in client handler");
             e.printStackTrace();
         }
-            try {
-                clientSock.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            // try {
+            //     clientSock.close();
+            // } catch (IOException e) {
+            //     // TODO Auto-generated catch block
+            //     e.printStackTrace();
+            // }
             
         }
         
 
     }
-    // Three login attempts fail, limit exceeded
+    // three login attempts fail, limit exceeded
     clients.get(clientNumber - 1).out.println("Too many attempts.");
 
     }
         
-        // Send message passed in to all live clients
+        // send message passed in to all live clients
         public void messageAll(String msg) {
         for (ClientHandler aClient: clients )
         {
@@ -127,7 +128,7 @@ class ClientHandler implements Runnable{
         
 
     }
-        // Checks if provided username (name) and password (pass) are a valid pair
+        // checks if provided username (name) and password (pass) are a valid pair in psswds.txt
         int validate(String name, String pass) {
             for (int i = 0; i < 5; i++)
 		{
@@ -147,10 +148,10 @@ class ClientHandler implements Runnable{
                 loggedIn[loginCount] = name; // place current client's login name into the array
                 
                 
-			return 1; // Name and password match
+			return 1; // name and password match file
 			}
-		}
-            out.println("Failed to login.");
+		}   
+            out.println("Failed to login."); // name and password do not match file
             return 0;
     }
 

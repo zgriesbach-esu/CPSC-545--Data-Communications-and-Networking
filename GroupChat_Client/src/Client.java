@@ -1,60 +1,34 @@
-// Client2 class that 
-// sends data and receives also 
+
+//**********************************//
+// Client Class                     //
+// Author: Zachary Griesbach        //
+//                                  //
+// Creates ServerConnector threads  //
+// to handle Client i/o             //
+//**********************************//
   
-import java.io.*; 
+
 import java.net.*;
 
-// Core function: https://www.geeksforgeeks.org/establishing-the-two-way-communication-between-server-and-client-in-java/
-class Client2 { 
+// core function modified from https: //www.youtube.com/watch?v=ZIzoesrHHQo
+class Client { 
   
     public static void main(String args[]) 
         throws Exception 
     { 
         
-        // Create client socket 
+        // create client socket 
         Socket s = new Socket("localhost", 888);
         
+        // create ServerConnector
         ServerConnector serverConn = new ServerConnector(s);
         
+        // run ServerConnector thread
         new Thread(serverConn).start();
-
-        // to send data to the server 
-        DataOutputStream dos 
-            = new DataOutputStream( 
-                s.getOutputStream()); 
   
-        // to read data coming from the server 
-        BufferedReader br 
-            = new BufferedReader( 
-                new InputStreamReader( 
-                    s.getInputStream())); 
-  
-        // to read data from the keyboard 
-        BufferedReader kb 
-            = new BufferedReader( 
-                new InputStreamReader(System.in)); 
-        String str, str1; 
-  
-     while (!(str = kb.readLine()).equals("quit")) { 
     
-            // send to the server 
-            dos.writeBytes(str + "\n"); 
-            
-
-            // receive from the server 
-            //str1 = br.readLine(); 
-  
-            //System.out.println(str1); 
-
-            
-            
-    } 
         Thread.currentThread().interrupt();
-        // close connection. 
-
-        dos.close(); 
-        br.close(); 
-        kb.close(); 
+        // close connection.  
         s.close(); 
         } 
     }

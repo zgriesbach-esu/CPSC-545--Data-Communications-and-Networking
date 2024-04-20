@@ -1,17 +1,27 @@
 
+//***********************************//
+// ServerConnector Class             //
+// Author: Zachary Griesbach         //
+//                                   //
+// Threads which handle client-side  //
+// interaction, i.e. submitting      //
+// messages and displaying messages  //
+// via the GUI                       //
+//***********************************//
+
 import java.io.*; 
 import java.net.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// Core function from https://www.youtube.com/watch?v=ZIzoesrHHQo
-// Button implementation from https://www.youtube.com/watch?v=-IMys4PCkIA
+// core function modified from https: //www.youtube.com/watch?v=ZIzoesrHHQo
+// button implementation modified from https: //www.youtube.com/watch?v=-IMys4PCkIA
 public class ServerConnector implements Runnable, ActionListener {
     private Socket server;
     private BufferedReader in;
     private DataOutputStream out;
-    
+
     // window components
     private JFrame frame;
     private JPanel panel;
@@ -21,16 +31,20 @@ public class ServerConnector implements Runnable, ActionListener {
     private JTextArea messageText;
     private JScrollPane scroll;
     
+   // constructor
    public ServerConnector(Socket sock) throws IOException {
     server = sock;
+
+    // connect a buffered reader and a data output stream to the socket passed in
     in = new BufferedReader(new InputStreamReader(server.getInputStream()));
     out = new DataOutputStream(server.getOutputStream()); 
 
-    // Chat window creation
+    // chat window creation
     frame = new JFrame();
         
     panel = new JPanel();
 
+    // create the text area that holds the chat conversation
     chatBox = new JTextArea();
     chatBox.setBounds(50, 50, 250, 200);
 
@@ -43,14 +57,12 @@ public class ServerConnector implements Runnable, ActionListener {
 
     // create scrollpane to allow chatbox to scroll up and down
     scroll = new JScrollPane(chatBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
-    ,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     scroll.setBounds(50, 50, 250, 200);
 
-    //frame.getContentPane().add(scroll);
-
     panel.add(scroll);
-    //panel.add(chatBox);
 
+    // create the text area that users type in and button to send that text
     messageText = new JTextArea();
     sendButton = new JButton("Send");
 
@@ -63,8 +75,7 @@ public class ServerConnector implements Runnable, ActionListener {
     panel.add(messageText); // attach messageText to panel
 
     sendButton.setBounds(10, 350 ,80,25);
-    //sendButton.setText("Send");
-    sendButton.addActionListener(this);
+    sendButton.addActionListener(this); // give the button functionality on being clicked
     panel.add(sendButton); // attach sendButton to panel
 
 
@@ -76,12 +87,11 @@ public class ServerConnector implements Runnable, ActionListener {
     frame.setTitle("GroupChat");
 }
 
-    
-    
+    // thread behavior
     @Override
     public void run() {
 
-            
+            // show the GroupChat window
             frame.setVisible(true);
             while (true) {
                 
@@ -93,14 +103,12 @@ public class ServerConnector implements Runnable, ActionListener {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                // Attempting to exit gracefully
                 if (msg.equals("quit")) break;
                     
                     chatBox.append(msg + "\n");
-                    System.out.println(msg);
             }
             
-                // Close socket
+                // close socket
                 try {
                     server.close();
                 } catch (IOException e) {
@@ -108,31 +116,33 @@ public class ServerConnector implements Runnable, ActionListener {
                     e.printStackTrace();
                 }
         
-}
+    }
 
-@Override
-public void actionPerformed(ActionEvent e) {
-    // TODO Auto-generated method stub
-    if (e.getSource() == sendButton)
-    {
-
-        String msg = null;
-        msg = messageText.getText();
-        messageText.setText("");
-
-
-        // don't send blank messages or whitespace
-        if (!msg.matches("[ ]*"))
+    // method executes when send button is clicked
+    // takes whatever is typed in messageText, not including whitespace or null
+    // and resets messageText to be blank
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getSource() == sendButton)
         {
-            try {
-                out.writeBytes(msg + "\n");
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+
+            String msg = null;
+            msg = messageText.getText();
+            messageText.setText("");
+
+
+            // don't send blank messages or whitespace
+            if (!msg.matches("[ ]*"))
+            {
+                try {
+                    out.writeBytes(msg + "\n");
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         }
     }
-}
 
-//throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
 }
